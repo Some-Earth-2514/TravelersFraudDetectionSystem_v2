@@ -67,7 +67,7 @@ valid_initial = set()
 fraud_initial = set()
 
 
-def policy_state():  # done
+def policy_state():
     # appends the index of list 'POLICY_STATE' that is tested when counts are indexed
     invalid_policy_state = []
     valid_policy_state = []
@@ -106,7 +106,7 @@ def policy_state():  # done
     return policy_state
 
 
-def birth_date():  # done
+def birth_date():
     # counters for ages below 18 and above 80
     count_birth_date_invalid = 0
     count_birth_date_valid = 0
@@ -146,7 +146,7 @@ def birth_date():  # done
     return birth_date
 
 
-def vehicle_year():  # done
+def vehicle_year():
     invalid_vehicle_year = []
     valid_vehicle_year = []
 
@@ -198,34 +198,7 @@ def invalid():  # done
     return invalid_sorted
 
 
-def alea_fraud():  # done
-    fraud_ALAE = []
-    count_ALAE = 0
-    total_legal_fees = 0
-
-    for i in range(len(CLAIM_EXPENSE_EST_AMT_c)):
-        # check bodily & multiple
-        # if VEH_PRIMARY_PT_OF_DAMAGE is not none and AUTO_ACCIDENT_DESC is multi
-        # multi by collision cost
-        total_legal_fees = BI_CLMT_CNT_c[i] * 15785
-        if VEH_PRIMARY_PT_OF_DAMAGE_c[i] == 'No Damage':
-            total_legal_fees += 0
-        else:
-            total_legal_fees += 4698
-        if CLAIM_EXPENSE_EST_AMT_c[i] > total_legal_fees:
-            fraud_ALAE.append(i)
-            count_ALAE += 1
-
-    fraud_initial.update(fraud_ALAE)
-
-    print(count_ALAE)
-    print(fraud_ALAE)
-    print(fraud_initial)
-
-    return alea_fraud
-
-
-def indemnity_fraud():  # done
+def indemnity_fraud():
     fraud_indemnity = []
     count = 0
 
@@ -279,7 +252,7 @@ def indemnity_fraud():  # done
     return indemnity_fraud
 
 
-def inspection_fraud():  # done
+def inspection_fraud():
     fraud_inspections = []
     count_inspections = 0
 
@@ -295,7 +268,7 @@ def inspection_fraud():  # done
     print(fraud_initial)
 
 
-def fraud():  # done
+def fraud():
     fraud_sorted = sorted(index + 1 for index in fraud_initial)
     print(fraud_sorted)
 
@@ -332,10 +305,6 @@ if __name__ == "__main__":
 
     print("Invalid")
     invalid()
-    print()
-
-    print("ALEA fraud")
-    alea_fraud()
     print()
 
     print("Indemnity fraud")
