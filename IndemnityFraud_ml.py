@@ -1,25 +1,50 @@
+# importing required libraries
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
-from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-df = pd.read_csv("Inspection fraud 0-1.csv")
-# df.head()
+# loading the dataset into a pandas dataframe
+data = pd.read_csv('Indemnity fraud 0-1.csv')
 
-plt.scatter(df.APPR_DAM_EST_REC_CNT, df.FRAUD, marker="+", color="red")
+# encoding the categorical feature "VEH_PRIMARY_PT_OF_DAMAGE" into numerical values
+le = LabelEncoder()
+data['VEH_PRIMARY_PT_OF_DAMAGE'] = le.fit_transform(data['VEH_PRIMARY_PT_OF_DAMAGE'])
+
+# splitting the dataset into training and testing data
+X = data.drop('FRAUD', axis=1)
+y = data['FRAUD']
+print(y)
+
+plt.scatter(data['CLAIM_INDEMNITY_EST_AMT'], data['VEH_PRIMARY_PT_OF_DAMAGE'], c=data['FRAUD'])
+plt.xlabel('Claim Indemnity Estimated Amount')
+plt.ylabel('Vehicle Primary Point of Damage')
+plt.title('Fraud Detection Scatter Plot')
 plt.show()
 
-X_train, X_test, Y_train, Y_test = train_test_split(df[["APPR_DAM_EST_REC_CNT"]], df.FRAUD, test_size=0.9)
-print(X_test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+# training the logistic regression model on the training data
 model = LogisticRegression()
-model_fit = model.fit(X_train, Y_train)  # training for model
+model.fit(X_train, y_train)
 
-predict_X_test = model.predict(X_test)
-print(predict_X_test)
+# predicting the probability of fraud on the testing data using the trained model
+y_pred_prob = model.predict_proba(X_test)[:, 1]
+y_pred = np.where(y_pred_prob > 0.5, 1, 0)
 
-score_test = model.score(X_test, Y_test)
+score_test = model.score(X_test, y_test)
+
+
+# evaluating the performance of the model using accuracy, precision, recall, and F1-score
+print(y_pred_prob)
+print(y_pred)
 print(score_test)
 
-predict_prob_X_test = model.predict_proba(X_test)
-print(predict_prob_X_test)
+
+print('Accuracy:', accuracy_score(y_test, y_pred))
+print('Precision:', precision_score(y_test, y_pred))
+print('Recall:', recall_score(y_test, y_pred))
+print('F1-score:', f1_score(y_test, y_pred))
